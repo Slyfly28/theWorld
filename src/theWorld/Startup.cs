@@ -17,13 +17,7 @@ namespace theWorld
 
         public void Configure(IApplicationBuilder app)
         {
-            // Add the platform handler to the request pipeline.
-            
-
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            app.UseStaticFiles();
         }
     }
 }
