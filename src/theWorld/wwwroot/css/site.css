@@ -42,6 +42,9 @@ input[type=text], input[type=password] , textarea {
     .menu li.active {
         font-weight: bold;
     }
+    .menu li a {
+        color: #eee;
+    }
 #sidebar {
     background: #2a2c36;
     color: #eee;
@@ -51,7 +54,21 @@ input[type=text], input[type=password] , textarea {
     overflow: hidden;
     left: 0;
     margin: 0;
+    -webkit-transition: left ease .25s;
+    transition: left ease .25s;
 }
+    #sidebar.hidesidebar {
+        left: -250px;
+        -webkit-transition: left ease .25s;
+        transition: left ease .25s;
+    }
 #wrapper {
     margin: 0 0 0 250px;
+    -webkit-transition: margin-left ease .25s;
+    transition: margin-left ease .25s;
 }
+    #wrapper.hidesidebar {
+        margin-left: 0;
+        -webkit-transition: margin-left ease .25s;
+        transition: margin-left ease .25s;
+    }
