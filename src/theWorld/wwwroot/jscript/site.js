@@ -20,13 +20,16 @@
 //    });
 
     var $sidebarAndWrapper = $("#sidebar,#wrapper");
+    var $icon = $("#showsidebar i.fa")
 
     $("#showsidebar").on("click", function() {
         $sidebarAndWrapper.toggleClass("hidesidebar");
         if ($sidebarAndWrapper.hasClass("hidesidebar")) {
-            $(this).text("Show Menu");
+            $icon.removeClass("fa-angle-left");
+            $icon.addClass("fa-angle-right");
         } else {
-            $(this).text("Hide Menu");
+            $icon.addClass("fa-angle-left");
+            $icon.removeClass("fa-angle-right");
         }
     });
     
