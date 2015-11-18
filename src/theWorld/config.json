@@ -1,5 +1,8 @@
 {
     "AppSettings": {
         "SiteEmailAddress": "me@hello.com"
+    },
+    "Data": {
+        "WorldContextConnection":  "Server=(localdb)\\ProjectsV13;Database=theWorldDB;Trusted_Connection=true;MultipleActiveResultSets=true"
     }
 }
