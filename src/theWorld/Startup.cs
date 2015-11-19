@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
 using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
+using Newtonsoft.Json.Serialization;
 using theWorld.Models;
+using theWorld.ViewModels;
 using TheWorld.Models;
 using TheWorld.Services;
+using IConfiguration = Microsoft.Framework.Configuration.IConfiguration;
 
 namespace theWorld
 {
@@ -30,7 +34,11 @@ namespace theWorld
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(); // Add Mvc to the project
+            services.AddMvc()
+                .AddJsonOptions(opt =>
+                {
+                    opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver(); // unify the JSON format of script interoperability
+                }); // Add Mvc to the project
 
             services.AddLogging(); //Enable Logging
 
@@ -53,6 +61,12 @@ namespace theWorld
             loggerfactory.AddDebug(LogLevel.Information);
 
             app.UseStaticFiles();
+
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<Trip, TripViewModel>().ReverseMap();
+                config.CreateMap<Stop, StopViewModel>().ReverseMap();
+            }); //specify the different config for each types. Optimizes it.
 
             //start Mvc with the specified map route
             app.UseMvc(config =>
