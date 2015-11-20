@@ -1,5 +1,6 @@
 {
     "AppSettings": {
+        "BingKey": "BLAHBLAH",
         "SiteEmailAddress": "me@hello.com"
     },
     "Data": {

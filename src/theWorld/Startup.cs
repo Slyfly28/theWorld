@@ -11,6 +11,7 @@ using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
 using Newtonsoft.Json.Serialization;
 using theWorld.Models;
+using theWorld.Services;
 using theWorld.ViewModels;
 using TheWorld.Models;
 using TheWorld.Services;
@@ -41,11 +42,11 @@ namespace theWorld
                 }); // Add Mvc to the project
 
             services.AddLogging(); //Enable Logging
-
             services.AddEntityFramework() // register EF
                 .AddSqlServer()
                 .AddDbContext<WorldContext>();
 
+            services.AddScoped<CoordService>();
             services.AddTransient<WorldContextSeedData>();
             services.AddScoped<ITheWorldRepository, TheWorldRepository>(); // Enable only one instance
 
