@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 using theWorld.Models;
 
 namespace TheWorld.Models
@@ -8,14 +10,27 @@ namespace TheWorld.Models
     public class WorldContextSeedData
     {
         private WorldContext _context;
+        private UserManager<WorldUser> _userManager;
 
-        public WorldContextSeedData(WorldContext context)
+        public WorldContextSeedData(WorldContext context, UserManager<WorldUser> userManager )
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        public void EnsureSeedData()
+        public async Task EnsureSeedDataAsync()
         {
+            if (await _userManager.FindByEmailAsync("greg.harlok@theworld.com") == null)
+            {
+                //Add the user
+                var newUser = new WorldUser()
+                {
+                    UserName = "gharlok",
+                    Email = "greg.harlok@theworld.com"
+                };
+
+                await _userManager.CreateAsync(newUser, "abcd1234!");
+            }
             if (!_context.Trips.Any())
             {
                 //Add New Data
@@ -23,7 +38,7 @@ namespace TheWorld.Models
                 {
                     Name = "US Trip",
                     Created = DateTime.UtcNow,
-                    UserName = "",
+                    UserName = "gharlok",
                     Stops = new List <Stop>()
                     {
                         new Stop() {Name = "Atlanta, GA", Arrival = new DateTime(2014, 5, 21), Latitude = 33.7550, Longitude = 84.3900, Order = 0},
@@ -38,12 +53,11 @@ namespace TheWorld.Models
 
                 _context.Trips.Add(usTrip);
                 _context.Stops.AddRange(usTrip.Stops);
-
                 var worldTrip = new Trip()
                 {
                     Name = "World Trip",
                     Created = DateTime.UtcNow,
-                    UserName = "",
+                    UserName = "gharlok",
                     Stops = new List<Stop>()
                     {
                         new Stop() {Name = "Country 1", Arrival = new DateTime(2015, 4, 21), Latitude = 33.7550, Longitude = 84.3900, Order = 0},

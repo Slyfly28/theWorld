@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Mvc;
 using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
@@ -35,11 +37,29 @@ namespace theWorld
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc()
+            services.AddMvc(config =>
+            {
+#if !DEBUG
+                config.Filters.Add(new RequireHttpsAttribute());
+#endif
+            })
                 .AddJsonOptions(opt =>
                 {
                     opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver(); // unify the JSON format of script interoperability
                 }); // Add Mvc to the project
+
+            // Added Identity User Authentication Service with specified requirements
+            services.AddIdentity<WorldUser, IdentityRole>(config =>
+            {
+                config.User.RequireUniqueEmail = true;
+                config.Password.RequiredLength = 8;
+            })
+            .AddEntityFrameworkStores<WorldContext>();
+
+            services.AddCookieAuthentication(config =>
+            {
+                config.LoginPath = "/Auth/Login";
+            });
 
             services.AddLogging(); //Enable Logging
             services.AddEntityFramework() // register EF
@@ -50,18 +70,20 @@ namespace theWorld
             services.AddTransient<WorldContextSeedData>();
             services.AddScoped<ITheWorldRepository, TheWorldRepository>(); // Enable only one instance
 
-        #if DEBUG
+#if DEBUG
             services.AddScoped<IMailService, DebugMailService>(); // supply the services
-        #else
+#else
             services.AddScoped<IMailService, RealMailService>(); 
-        #endif
+#endif
         }
 
-        public void Configure(IApplicationBuilder app, WorldContextSeedData seeder, ILoggerFactory loggerfactory)
+        public async void Configure(IApplicationBuilder app, WorldContextSeedData seeder, ILoggerFactory loggerfactory)
         {
             loggerfactory.AddDebug(LogLevel.Information);
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(); // allow usage of static files
+
+            app.UseIdentity(); // allow use of the identity 
 
             Mapper.Initialize(config =>
             {
@@ -79,7 +101,7 @@ namespace theWorld
                     );
             });
 
-            seeder.EnsureSeedData();
+            await seeder.EnsureSeedDataAsync();
         }
     }
 }

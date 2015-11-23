@@ -1,6 +1,7 @@
 using Microsoft.AspNet.Mvc;
 using System;
 using System.Linq;
+using Microsoft.AspNet.Authorization;
 using theWorld.Models;
 using theWorld.ViewModels;
 using TheWorld.Services;
@@ -19,6 +20,12 @@ namespace theWorld.Controllers.Web
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Trips()
         {
             var trips = _repository.GetAllTrips();
             return View(trips);
