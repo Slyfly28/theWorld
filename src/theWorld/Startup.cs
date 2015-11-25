@@ -53,13 +53,9 @@ namespace theWorld
             {
                 config.User.RequireUniqueEmail = true;
                 config.Password.RequiredLength = 8;
+                config.Cookies.ApplicationCookie.LoginPath = "/Auth/Login";
             })
             .AddEntityFrameworkStores<WorldContext>();
-
-            services.AddCookieAuthentication(config =>
-            {
-                config.LoginPath = "/Auth/Login";
-            });
 
             services.AddLogging(); //Enable Logging
             services.AddEntityFramework() // register EF

@@ -25,11 +25,11 @@ namespace TheWorld.Models
                 //Add the user
                 var newUser = new WorldUser()
                 {
-                    UserName = "gharlok",
+                    UserName = "gregharlok",
                     Email = "greg.harlok@theworld.com"
                 };
 
-                await _userManager.CreateAsync(newUser, "abcd1234!");
+                await _userManager.CreateAsync(newUser, "abcd1234");
             }
             if (!_context.Trips.Any())
             {
@@ -38,7 +38,7 @@ namespace TheWorld.Models
                 {
                     Name = "US Trip",
                     Created = DateTime.UtcNow,
-                    UserName = "gharlok",
+                    UserName = "gregharlok",
                     Stops = new List <Stop>()
                     {
                         new Stop() {Name = "Atlanta, GA", Arrival = new DateTime(2014, 5, 21), Latitude = 33.7550, Longitude = 84.3900, Order = 0},
@@ -57,7 +57,7 @@ namespace TheWorld.Models
                 {
                     Name = "World Trip",
                     Created = DateTime.UtcNow,
-                    UserName = "gharlok",
+                    UserName = "gregharlok",
                     Stops = new List<Stop>()
                     {
                         new Stop() {Name = "Country 1", Arrival = new DateTime(2015, 4, 21), Latitude = 33.7550, Longitude = 84.3900, Order = 0},
